@@ -19,10 +19,15 @@ class Progress
      @total_read_bytes >= @content_length
   end
   
+  def byte_count_remaining
+    @content_length - @total_read_bytes
+  end
+  
   private
   
   def recompute_current_progress
     @current_progress = 100.0 * @total_read_bytes.to_f / @content_length.to_f
+#    puts "#{@total_read_bytes} / #{@content_length}"
   end
 
 end

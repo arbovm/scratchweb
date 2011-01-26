@@ -36,6 +36,10 @@ describe Progress do
       @progress.add(200)
       @progress.is_finished.should be_eql(true)
     end
+    
+    it "should yield the remaining byte count" do
+      @progress.add(101)
+      @progress.byte_count_remaining.should be_eql(99)
+    end
   end
-
 end

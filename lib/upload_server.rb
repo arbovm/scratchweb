@@ -2,8 +2,9 @@
 class UploadServer
   
   def initialize attrs
-    @host = attrs[:host]
-    @port = attrs[:port]
+    @host   = attrs[:host]
+    @port   = attrs[:port]
+    @routes = attrs[:routes]
   end
   
   def start
@@ -16,8 +17,8 @@ class UploadServer
       # Thread.start do
         ClientHandler.new(clientSocket).handle
       # end
-      
     end
   end
+  
 end
 
