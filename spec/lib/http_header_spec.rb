@@ -13,7 +13,7 @@ Content-Type: multipart/form-data; boundary=----------------------------ac7579a3
 EOH
 
   GET_HEADER = <<EOH
-GET / HTTP/1.1
+GET /uploads/123/progress HTTP/1.1
 Host: 0.0.0.0:8081
 User-Agent: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_6; en-us) AppleWebKit/533.19.4 (KHTML, like Gecko) Version/5.0.3 Safari/533.19.4
 Accept: application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5
@@ -51,21 +51,25 @@ EOH
     end
     
     it "should know its route per method" do
-      @handler.route?(:post, "/uploads").should be_true
-      @handler.route?(:post, "/").should be_false
-      @handler.route?(:get,  "/uploads").should be_false
-      @handler.route?(:post, "/xxxxxxx").should be_false
+      @handler.route?(:post, "/uploads"){true}.should be_true
+      @handler.route?(:post, "/"){true}.should be_false
+      @handler.route?(:get,  "/uploads"){true}.should be_false
+      @handler.route?(:post, "/xxxxxxx"){true}.should be_false
     end
     
-    it "route should understand regexp in path" do
-      @handler.route?(:post, "/.*").should be_true
-      @handler.route?(:get,  "/.*").should be_false
-      @handler.route?(:post, "/uploads/.*").should be_false
+    it "route should understand params in path" do
+      @handler.route?(:post, "/:path"){|path| path.should eql("uploads")}
+      @handler.route?(:get,  "/:path"){true}.should be_false
+      @handler.route?(:post, "/uploads/:path"){true}.should be_false
+    end
+    
+    it "should extract path params" do
+      @handler.extract_path_params("/:path").should be_eql(["uploads"])
     end
     
   end
   
-  describe "when processing GET header" do
+  describe "when processing GET header with path /uploads/123/progress" do
     
     before(:each) do
       @handler = HttpHeader.new :header_string => GET_HEADER
@@ -82,8 +86,13 @@ EOH
     end
        
     it "should know its path" do
-      @handler.path.should be_eql("/")
+      @handler.path.should be_eql("/uploads/123/progress")
     end
+    
+    it "should extract path params" do
+      @handler.extract_path_params("/uploads/:id/progress").should be_eql(["123"])
+    end
+    
   end
   
   describe "when processing DELETE header" do

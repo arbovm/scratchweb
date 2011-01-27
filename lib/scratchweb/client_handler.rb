@@ -13,7 +13,9 @@ class ClientHandler
   def handle
     begin
       @http_header = HttpHeader.new :header_string => read_header
-      route
+      dispatch
+      #  todo nothing rendered?
+      #    -> render_error :not_found
     ensure
       @socket.close
     end
@@ -28,37 +30,50 @@ class ClientHandler
     header
   end
   
-  def route
-    if @http_header.route?(:get,"/")
+  def dispatch
+    
+    action(:get,"/") do
       render :view => :index
-      
-    elsif @http_header.route?(:get,"/uploads")
-      render :text => "uploads"
-      
-    elsif @http_header.route?(:get,"/uploads/progress")
-      progress = @store[123]
+    end
+
+    action(:post,"/uploads.js") do
+      id = rand(1000).to_s
+      render :text => '{"id":'+id+'}'
+    end
+
+    action(:put,"/uploads/:id") do |id|
+      receive(id)
+      redirect :to => "/uploads/#{id}"
+    end
+
+    action(:get,"/uploads/:id/progress") do |id|
+      progress = @store[id]
       if progress
         render :text => progress.current.to_s
       else
         render :text => "unknown"
       end
-    elsif @http_header.route?(:post,"/uploads")
-     receive
-     redirect :to => "/"
-     
-    elsif @http_header.route?(:get,"/assets/.*")
-      puts "rendering static asset #{@http_header.path}"
-      render :asset => @http_header.path
-      
-    else
-      render_error :not_found
-   end
+    end
+
+    action(:get,"/uploads/:id") do |id|
+      id = @http_header.params[:id]
+      render :view => :show #id
+    end
+    
+    action(:get,"/assets/:file_name") do |file_name|
+      render :asset => file_name
+    end
+    
+  end
+
+  def action method, path, &blk
+    @http_header.route?(method, path, &blk)
   end
   
-  def receive
+  def receive id
 
     progress = Progress.new :content_length => @http_header.content_length
-    @store[123] = progress
+    @store[id] = progress
     until progress.is_finished
       bytes_to_read = [CHUNK_SIZE, progress.byte_count_remaining].min
       chunk  = @socket.read(bytes_to_read)
@@ -94,7 +109,7 @@ class ClientHandler
       response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: #{text.size}\r\n\r\n#{text}"
       
     elsif asset = attrs[:asset]
-      content  = IO.binread(APP_DIR+asset) #TODO Fix security issue
+      content  = IO.binread(APP_DIR+"/assets/"+asset) #TODO Fix security issue
       response = "HTTP/1.1 200 OK\r\nContent-Length: #{content.size}\r\n\r\n#{content}"
     
     elsif view = attrs[:view]

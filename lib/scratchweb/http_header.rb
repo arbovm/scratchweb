@@ -20,10 +20,23 @@ class HttpHeader
     @method == type
   end
   
-  def route? method, path
-    path_with_quoted_slashes = path.gsub('/','\/')
-    path_regexp = /^#{path_with_quoted_slashes}$/
-#    puts "#{path_regexp.inspect} ~= #{path}"
-    method?(method) && @path.match(path_regexp)
+  def route? method, path, &blk
+    quoted_slashes_and_replaced_params = path.gsub('/','\/').gsub(/:[^\/]*/, '.*')
+    path_regexp = /^#{quoted_slashes_and_replaced_params}$/
+    if method?(method) && @path.match(path_regexp)
+      params = extract_path_params(path)
+      yield(*params)
+    end
+  end
+  
+  def extract_path_params path
+    result = []
+    splitted_and_zipped = path.split('/').zip(@path.split('/'))
+    splitted_and_zipped.each do |part1,part2|
+      if part1.match(/^:\w+$/)
+        result << part2
+      end
+    end
+    result
   end
 end
