@@ -32,20 +32,24 @@ class ClientHandler
   
   def dispatch
     
+    # welcome
     action(:get,"/") do
       render :view => :index
     end
 
+    # create upload
     action(:post,"/uploads.js") do
       id = rand(1000).to_s
-      render :text => '{"id":'+id+'}'
+      render :text => '{"_id":'+id+'}'
     end
 
-    action(:put,"/uploads/:id") do |id|
+    # update upload
+    action(:post,"/uploads/:id") do |id|
       receive(id)
       redirect :to => "/uploads/#{id}"
     end
 
+    # show nested progress resource of upload
     action(:get,"/uploads/:id/progress") do |id|
       progress = @store[id]
       if progress
@@ -54,7 +58,8 @@ class ClientHandler
         render :text => "unknown"
       end
     end
-
+    
+    # show upload
     action(:get,"/uploads/:id") do |id|
       id = @http_header.params[:id]
       render :view => :show #id
