@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../../lib/progress.rb'
+require File.dirname(__FILE__) + '/../../lib/scratchweb'
 
 describe Progress do
   

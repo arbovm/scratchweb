@@ -1,11 +1,9 @@
-require File.dirname(__FILE__) + '/../../lib/upload_server.rb'
+require File.dirname(__FILE__) + '/../../lib/scratchweb'
 
-describe UploadServer do
+describe ScratchServer do
   
   
   it "should .." do
-    
 
-    
   end
 end

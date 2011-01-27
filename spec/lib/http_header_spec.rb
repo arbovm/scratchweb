@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../../lib/http_header.rb'
+require File.dirname(__FILE__) + '/../../lib/scratchweb'
 
 describe HttpHeader do
   
@@ -30,7 +30,7 @@ Accept: */*
   
 EOH
 
-  describe "when processing POST header" do
+  describe "when processing POST header with path /uploads" do
     
     before(:each) do
       @handler = HttpHeader.new :header_string => POST_HEADER
@@ -52,8 +52,15 @@ EOH
     
     it "should know its route per method" do
       @handler.route?(:post, "/uploads").should be_true
+      @handler.route?(:post, "/").should be_false
       @handler.route?(:get,  "/uploads").should be_false
       @handler.route?(:post, "/xxxxxxx").should be_false
+    end
+    
+    it "route should understand regexp in path" do
+      @handler.route?(:post, "/.*").should be_true
+      @handler.route?(:get,  "/.*").should be_false
+      @handler.route?(:post, "/uploads/.*").should be_false
     end
     
   end

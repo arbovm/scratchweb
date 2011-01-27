@@ -21,6 +21,9 @@ class HttpHeader
   end
   
   def route? method, path
-    method?(method) && @path == path
+    path_with_quoted_slashes = path.gsub('/','\/')
+    path_regexp = /^#{path_with_quoted_slashes}$/
+#    puts "#{path_regexp.inspect} ~= #{path}"
+    method?(method) && @path.match(path_regexp)
   end
 end

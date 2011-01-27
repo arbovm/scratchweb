@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../../lib/client_handler.rb'
+require File.dirname(__FILE__) + '/../../lib/scratchweb'
 
 describe ClientHandler do
   
