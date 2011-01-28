@@ -10,6 +10,14 @@ class App < Scratchweb::ClientHandler
     action(:get,"/") do
       render :view => :index
     end
+    
+    action(:get,"/form.html") do
+      render :view => :iframe
+    end
+    
+    action(:get,"/done.html") do
+      render :view => :done
+    end
 
     # create upload
     action(:post,"/uploads.js") do
@@ -20,7 +28,8 @@ class App < Scratchweb::ClientHandler
     # update upload
     action(:post,"/uploads/:id") do |id|
       receive(id)
-      redirect :to => "/uploads/#{id}"
+      redirect :to => "/done.html"
+#      redirect :to => "/uploads/#{id}"
     end
 
     # show nested progress resource of upload

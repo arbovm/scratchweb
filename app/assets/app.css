@@ -1,3 +1,9 @@
 #content {
 	padding: 50px;
 }
+
+#form_frame {
+	border:0;
+	width:400px;
+	
+}
