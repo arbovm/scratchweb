@@ -1,5 +1,5 @@
 #content {
-	border:1px solid black;
+	border:1px solid #999;
 	height:250px;
 	margin-left:140px;
 	margin-top:40px;
@@ -14,6 +14,8 @@
 
 div#progress {
 	height:20px;
+	background-color:#ccf;
+	width:0;
 }
 
 #upload_form_submit {
@@ -32,6 +34,6 @@ hr.clear {
 
 body {
 	font-family:Arial, sans-serif;
-	font-size:110%;
+	font-size:18px;
 }
 

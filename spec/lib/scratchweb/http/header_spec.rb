@@ -1,6 +1,6 @@
-require File.dirname(__FILE__) + '/../../lib/scratchweb'
+require File.dirname(__FILE__) + '/../../../../lib/scratchweb'
 
-describe HttpHeader do
+describe Scratchweb::Http::Header do
   
   POST_HEADER = <<EOH
 POST /uploads HTTP/1.1
@@ -33,7 +33,7 @@ EOH
   describe "when processing POST header with path /uploads" do
     
     before(:each) do
-      @handler = HttpHeader.new :header_string => POST_HEADER
+      @handler = Scratchweb::Http::Header.new :header_string => POST_HEADER
     end
     
     it "should parse content length" do  
@@ -72,7 +72,7 @@ EOH
   describe "when processing GET header with path /uploads/123/progress" do
     
     before(:each) do
-      @handler = HttpHeader.new :header_string => GET_HEADER
+      @handler = Scratchweb::Http::Header.new :header_string => GET_HEADER
     end
     
     it "content length should be zero for GET header without content-length" do  
@@ -98,7 +98,7 @@ EOH
   describe "when processing DELETE header" do
     
     before(:each) do
-      @handler = HttpHeader.new :header_string => DELETE_HEADER
+      @handler = Scratchweb::Http::Header.new :header_string => DELETE_HEADER
     end
 
     it "should know its method" do

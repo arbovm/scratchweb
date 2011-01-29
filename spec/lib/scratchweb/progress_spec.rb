@@ -1,11 +1,11 @@
-require File.dirname(__FILE__) + '/../../lib/scratchweb'
+require File.dirname(__FILE__) + '/../../../lib/scratchweb'
 
-describe Progress do
+describe Scratchweb::Progress do
   
   describe "of a request with a content length of 200 bytes" do
     
     before :each do
-      @progress = Progress.new :content_length => 200
+      @progress = Scratchweb::Progress.new :content_length => 200
     end
 
     it "should initially have a progress of zero" do

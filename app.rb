@@ -2,21 +2,13 @@
 
 require File.dirname(__FILE__) + '/lib/scratchweb'
 
-class App < Scratchweb::ClientHandler
+class App < Scratchweb::ConnectionHandler
   
   def dispatch
     
     # welcome
     action(:get,"/") do
       render :view => :index
-    end
-    
-    action(:get,"/form.html") do
-      render :view => :iframe
-    end
-    
-    action(:get,"/done.html") do
-      render :view => :done
     end
 
     # create upload
@@ -29,12 +21,18 @@ class App < Scratchweb::ClientHandler
     action(:post,"/uploads/:id") do |id|
       receive(id)
       redirect :to => "/done.html"
-#      redirect :to => "/uploads/#{id}"
+    end
+
+    action(:get,"/done.html") do
+      render :view => :done
     end
 
     # show nested progress resource of upload
     action(:get,"/uploads/:id/progress") do |id|
       progress = @store[id]
+      if progress.current == 0 
+        log "#{@store.inspect}"
+      end
       if progress
         render :text => progress.current.to_s
       else
