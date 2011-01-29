@@ -1,9 +1,37 @@
 #content {
-	padding: 50px;
+	border:1px solid black;
+	height:250px;
+	margin-left:140px;
+	margin-top:40px;
+	padding:10px;
+	width:300px;
 }
 
 #form_frame {
 	border:0;
 	width:400px;
-	
 }
+
+div#progress {
+	height:20px;
+}
+
+#upload_form_submit {
+	margin-left:225px;
+	margin-top:20px;
+}
+
+#name_form {
+	margin-bottom:30px;
+}
+
+hr.clear {
+	clear:both;
+	border:0;
+}
+
+body {
+	font-family:Arial, sans-serif;
+	font-size:110%;
+}
+

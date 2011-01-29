@@ -13,6 +13,7 @@ module Scratchweb
     def handle
       begin
         @http_header = Http::Header.new :header_string => read_header
+        log "---\n--- request: #{@http_header.method} #{@http_header.path}\n---"
         dispatch
         #  todo nothing rendered?
         #    -> render_error :not_found
@@ -26,7 +27,7 @@ module Scratchweb
       while (line = @socket.gets) && line != END_OF_HEADER
         header += line
       end
-      puts "\n>>> header:\n#{header}\n<<<"
+#      puts "\n>>> header:\n#{header}\n<<<"
       header
     end
   
@@ -46,9 +47,9 @@ module Scratchweb
         bytes_to_read = [CHUNK_SIZE, progress.byte_count_remaining].min
         chunk  = @socket.read(bytes_to_read)
         progress.add(chunk.size)
-        puts "#{progress.current}%"
+        #puts "#{progress.current}%"
       end
-      puts "finished"
+      log "upload finished"
 
     end
   
@@ -71,9 +72,9 @@ module Scratchweb
     end
   
     def render attrs
-      puts "\n---\n#{self.object_id}\n---"
       response = nil    
       if text = attrs[:text]
+        log "render text:#{text}"
         response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: #{text.size}\r\n\r\n#{text}"
       
       elsif asset = attrs[:asset]
@@ -94,5 +95,10 @@ module Scratchweb
 
       @socket.write(response)
     end
+    
+    def log str
+      puts "\n--#{self.object_id}\n#{str}\n--#{self.object_id}"
+    end
+    
   end
 end
