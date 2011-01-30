@@ -2,14 +2,15 @@ module Scratchweb
   module Http
     class Header
   
-      attr_accessor :content_length, :method, :path
+      attr_accessor :content_length, :method, :path, :multipart_boundary
   
       def initialize attributes
         @header_string = attributes[:header_string]
-    
+
+        @method = parse(/(\w+) [^ ]+ HTTP\/1.[0-1]/).downcase.to_sym    
         @path = parse(/\w+ ([^ ]+) HTTP\/1.[0-1]/)
-        @method = parse(/(\w+) [^ ]+ HTTP\/1.[0-1]/).downcase.to_sym
         @content_length = parse(/Content-Length: ([0-9]+)/).to_i
+        @multipart_boundary = parse(/^Content-Type: multipart\/form-data; boundary=(.*)$/)
       end
   
       def parse regexp_with_group
@@ -22,7 +23,7 @@ module Scratchweb
         @method == type
       end
   
-      def route? method, path, &blk
+      def call_if_action_matches method, path, &blk
         quoted_slashes_and_replaced_params = path.gsub('/','\/').gsub(/:[^\/]*/, '.*')
         path_regexp = /^#{quoted_slashes_and_replaced_params}$/
         if method?(method) && @path.match(path_regexp)

@@ -50,21 +50,25 @@ EOH
       @handler.path.should be_eql("/uploads")
     end
     
-    it "should know its route per method" do
-      @handler.route?(:post, "/uploads"){true}.should be_true
-      @handler.route?(:post, "/"){true}.should be_false
-      @handler.route?(:get,  "/uploads"){true}.should be_false
-      @handler.route?(:post, "/xxxxxxx"){true}.should be_false
+    it "should call block if method and path matches" do
+      @handler.call_if_action_matches(:post, "/uploads"){true}.should be_true
+      @handler.call_if_action_matches(:post, "/"){true}.should be_false
+      @handler.call_if_action_matches(:get,  "/uploads"){true}.should be_false
+      @handler.call_if_action_matches(:post, "/xxxxxxx"){true}.should be_false
     end
     
-    it "route should understand params in path" do
-      @handler.route?(:post, "/:path"){|path| path.should eql("uploads")}
-      @handler.route?(:get,  "/:path"){true}.should be_false
-      @handler.route?(:post, "/uploads/:path"){true}.should be_false
+    it "should yield path parameters to block if method and path matches" do
+      @handler.call_if_action_matches(:post, "/:path"){|path| path.should eql("uploads")}
+      @handler.call_if_action_matches(:get,  "/:path"){true}.should be_false
+      @handler.call_if_action_matches(:post, "/uploads/:path"){true}.should be_false
     end
     
-    it "should extract path params" do
+    it "should extract path parameters" do
       @handler.extract_path_params("/:path").should be_eql(["uploads"])
+    end
+    
+    it "should extract the multipart boundary" do
+      @handler.multipart_boundary.should be_eql('----------------------------ac7579a3cd1d')
     end
     
   end

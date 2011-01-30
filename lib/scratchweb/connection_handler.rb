@@ -36,17 +36,26 @@ module Scratchweb
     end
 
     def action method, path, &blk
-      @http_header.route?(method, path, &blk)
+      @http_header.call_if_action_matches(method, path, &blk)
     end
   
+    def fast_forward_to_file
+      line = nil
+      until line == @http_header.multipart_boundary
+        line = @socket.gets
+      end
+      3.times{@socket.gets}
+    end
+    
     def receive id
       progress = Progress.new :content_length => @http_header.content_length
       @store[id] = progress
+
       until progress.is_finished
         bytes_to_read = [CHUNK_SIZE, progress.byte_count_remaining].min
         chunk  = @socket.read(bytes_to_read)
         progress.add(chunk.size)
-#        puts "#{progress.current}%"
+        puts "#{chunk}%"
       end
       log "upload finished"
     end
