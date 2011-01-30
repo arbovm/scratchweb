@@ -16,6 +16,7 @@ module Scratchweb
       puts "please open http://#{@host}:#{@port}"
     
       loop do
+#        client_socket = server_socket.accept
         Thread.start(server_socket.accept) do |client_socket|
           @client_handler.new(:client_socket => client_socket, :store => @store).handle
         end

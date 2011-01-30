@@ -1,3 +1,6 @@
+require 'tempfile'
+
+
 module Scratchweb
   class ConnectionHandler
   
@@ -34,32 +37,18 @@ module Scratchweb
     def dispatch
       raise NotImplementedError.new("Please implement dispatch.")
     end
+    
+    def receive id
+      Scratchweb::MultipartParser.new(
+        :http_header => @http_header,
+        :input => @socket,
+        ).receive(id, @store)
+    end
 
     def action method, path, &blk
       @http_header.call_if_action_matches(method, path, &blk)
     end
-  
-    def fast_forward_to_file
-      line = nil
-      until line == @http_header.multipart_boundary
-        line = @socket.gets
-      end
-      3.times{@socket.gets}
-    end
     
-    def receive id
-      progress = Progress.new :content_length => @http_header.content_length
-      @store[id] = progress
-
-      until progress.is_finished
-        bytes_to_read = [CHUNK_SIZE, progress.byte_count_remaining].min
-        chunk  = @socket.read(bytes_to_read)
-        progress.add(chunk.size)
-        puts "#{chunk}%"
-      end
-      log "upload finished"
-    end
-  
     def redirect attrs
       respond("HTTP/1.1 302 Found\r\nLocation: #{attrs[:to]}\r\n\r\n")
     end

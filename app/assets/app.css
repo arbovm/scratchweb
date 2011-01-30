@@ -9,7 +9,7 @@
 
 #form_frame {
 	border:0;
-	width:400px;
+	display:none;
 }
 
 div#progress {

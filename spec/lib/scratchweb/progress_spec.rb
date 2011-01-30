@@ -37,9 +37,9 @@ describe Scratchweb::Progress do
       @progress.is_finished.should be_eql(true)
     end
     
-    it "should yield the remaining byte count" do
+    it "should yield the remaining bytes count" do
       @progress.add(101)
-      @progress.byte_count_remaining.should be_eql(99)
+      @progress.remaining_bytes_count.should be_eql(99)
     end
   end
 end

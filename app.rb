@@ -30,19 +30,15 @@ class App < Scratchweb::ConnectionHandler
     # show nested progress resource of upload
     action(:get,"/uploads/:id/progress") do |id|
       progress = @store[id]
-      if progress.current == 0 
-        log "#{@store.inspect}"
-      end
       if progress
         render :text => progress.current.to_s
       else
-        render :text => "unknown"
+        render :error => :not_found
       end
     end
     
     # show upload
     action(:get,"/uploads/:id") do |id|
-      id = @http_header.params[:id]
       render :view => :show #id
     end
     

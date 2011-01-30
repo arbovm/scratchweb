@@ -24,7 +24,7 @@ module Scratchweb
       end
   
       def call_if_action_matches method, path, &blk
-        quoted_slashes_and_replaced_params = path.gsub('/','\/').gsub(/:[^\/]*/, '.*')
+        quoted_slashes_and_replaced_params = path.gsub('/','\/').gsub(/:[^\/]*/, '[^/]+')
         path_regexp = /^#{quoted_slashes_and_replaced_params}$/
         if method?(method) && @path.match(path_regexp)
           params = extract_path_params(path)
