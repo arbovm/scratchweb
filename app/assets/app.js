@@ -20,8 +20,12 @@ $(document).ready(function(){
 		}
 		
 		var upload_form = $('#upload_form')
-		upload_form[0].action = uploadPath;
+		upload_form[0].action = uploadPath+"/file";
 		upload_form.submit(function() {
+
+			upload_form.filter(':input').each(function(input){
+				input.disable();
+			});
 	 		$('#progress').text("  0%");
 			window.setTimeout(query_progress, 500);
 		});

@@ -4,7 +4,6 @@ require 'tempfile'
 module Scratchweb
   class ConnectionHandler
   
-    CHUNK_SIZE = 64*1024
     END_OF_HEADER = "\r\n"
     APP_DIR = File.dirname(__FILE__) + "/../../app"
   
@@ -40,8 +39,8 @@ module Scratchweb
     
     def receive id
       Scratchweb::MultipartParser.new(
-        :http_header => @http_header,
-        :input => @socket,
+          :http_header => @http_header,
+          :input => @socket,
         ).receive(id, @store)
     end
 
@@ -50,38 +49,40 @@ module Scratchweb
     end
     
     def redirect attrs
-      respond("HTTP/1.1 302 Found\r\nLocation: #{attrs[:to]}\r\n\r\n")
+      respond_with Http::Response.new(:status_code => :'302', :location => attrs[:to])
     end
   
     def render attrs
       response = nil    
       if text = attrs[:text]
-        response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: #{text.size}\r\n\r\n#{text}"
+        response = Http::Response.new(:content_type => 'text/plain', :content => text)
       
       elsif asset = attrs[:asset]
-        content  = IO.binread(APP_DIR+"/assets/"+asset) #TODO Fix security issue
-        response = "HTTP/1.1 200 OK\r\nContent-Length: #{content.size}\r\n\r\n#{content}"
+        content  = IO.binread(APP_DIR+"/assets/"+asset) #TODO Fix security flaw
+        response = Http::Response.new(:content => content)
     
       elsif view = attrs[:view]
         content  = IO.binread(APP_DIR+"/views/#{view}.html")
-        response = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nContent-Length: #{content.size}\r\n\r\n#{content}"
+        response = Http::Response.new(:content_type => 'text/html', :content => content)
       
       elsif attrs[:error] == :not_found
         content  = IO.binread(APP_DIR+"/views/404.html")
-        response = "HTTP/1.1 404 NOT_FOUND\r\nContent-Type: text/html\r\nContent-Length: #{content.size}\r\n\r\n#{content}"
+        response = Http::Response.new(:status_code => :'404', :content_type => 'text/html', :content => content)
       
       else
         raise "\n!!! Don't know what to render attrs:#{attrs.inspect}\n"
       end
 
-      render_error(:not_found) unless response
-
-      respond(response)
+      if response
+        respond_with response
+      else
+        render_error :not_found
+      end
     end
 
-    def respond response
+    def respond_with response
       @responded = true
-      @socket.write(response)
+      @socket.write(response.to_s)
     end
     
     def log str

@@ -6,7 +6,7 @@ class App < Scratchweb::ConnectionHandler
   
   def dispatch
     
-    # welcome
+    # form
     action(:get,"/") do
       render :view => :index
     end
@@ -17,14 +17,15 @@ class App < Scratchweb::ConnectionHandler
       render :text => '{"_id":'+id+'}'
     end
 
-    # update upload
-    action(:post,"/uploads/:id") do |id|
+    # create file upload
+    action(:post,"/uploads/:id/file") do |id|
       receive(id)
-      redirect :to => "/done.html"
+      redirect :to => "/empty.html"
     end
-
-    action(:get,"/done.html") do
-      render :view => :done
+    
+    # target iframe content after upload
+    action(:get,"/empty.html") do
+      render :view => :empty
     end
 
     # show nested progress resource of upload
