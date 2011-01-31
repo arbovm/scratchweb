@@ -40,18 +40,19 @@ module Scratchweb
       line.match /Content-Disposition: form-data; name="[^"]+"; filename="^["]+"/
     end
     
-    def receive id, store
-      store[id] = @progress
+    def receive &blk
+      yield @progress
       fast_forward_to_file
-      safe_to_tempfile(id)
+      file = safe_to_tempfile
       read_rest_of_body
+      file
     end
     
-    def safe_to_tempfile id
+    def safe_to_tempfile
       end_found = false
       line = ""
       last_line = ""
-      file = Tempfile.new("upload-#{id}-")
+      file = Tempfile.new("upload-")
       begin
         until end_found || @progress.is_finished
           line = read_line
@@ -66,6 +67,7 @@ module Scratchweb
         file.close
       end
       puts "upload finished. file saved to #{file.path}"
+      file
     end
 
     def is_multipart_boundary? line

@@ -4,7 +4,7 @@ describe Scratchweb::Http::Response do
 
   it "should build response with status code 200 by default" do
     header = Scratchweb::Http::Response.new :content => "ok"
-    header.to_s.should be_eql("HTTP/1.1 200 OK\r\nServer: Scratchweb 0.1\r\nContent-Length: 2\r\nConnection: close\r\n\r\nok")
+    header.to_s.should eql("HTTP/1.1 200 OK\r\nServer: Scratchweb 0.1\r\nContent-Length: 2\r\nConnection: close\r\n\r\nok")
   end
   
   it "should set the content type" do

@@ -9,14 +9,13 @@ module Scratchweb
   
     def initialize attrs
       @socket = attrs[:client_socket]
-      @store  = attrs[:store]
       @responded = false
     end
   
     def handle
       begin
         @http_header = Http::Header.new :header_string => read_header
-        log "---\n--- request: #{@http_header.method} #{@http_header.path}\n---"
+        log "request: #{@http_header.method} #{@http_header.path}"
         dispatch
         render :error => :not_found unless @responded
       ensure
@@ -29,19 +28,12 @@ module Scratchweb
       while (line = @socket.gets) && (line != END_OF_HEADER)
         header += line
       end
-      log "\n>>> header:\n#{header}\n<<<"
+      log "header:\n#{header}\nend_header"
       header
     end
   
     def dispatch
       raise NotImplementedError.new("Please implement dispatch.")
-    end
-    
-    def receive id
-      Scratchweb::MultipartParser.new(
-          :http_header => @http_header,
-          :input => @socket,
-        ).receive(id, @store)
     end
 
     def action method, path, &blk
@@ -85,6 +77,10 @@ module Scratchweb
       @socket.write(response.to_s)
     end
     
+    def multipart_parser
+      Scratchweb::MultipartParser.new :http_header => @http_header, :input => @socket
+    end
+      
     def log str
       puts "\n--#{self.object_id}\n#{str}\n--#{self.object_id}"
     end

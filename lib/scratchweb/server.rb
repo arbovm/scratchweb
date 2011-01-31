@@ -8,7 +8,6 @@ module Scratchweb
       @host   = attrs[:host]
       @port   = attrs[:port]
       @routes = attrs[:routes]
-      @store  = {}
     end
   
     def start
@@ -18,7 +17,7 @@ module Scratchweb
       loop do
 #        client_socket = server_socket.accept
         Thread.start(server_socket.accept) do |client_socket|
-          @client_handler.new(:client_socket => client_socket, :store => @store).handle
+          @client_handler.new(:client_socket => client_socket).handle
         end
       end
     end

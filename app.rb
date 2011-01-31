@@ -2,6 +2,13 @@
 
 require File.dirname(__FILE__) + '/lib/scratchweb'
 
+class Config
+  def self.store
+    @store ||= {}
+    @store
+  end
+end
+
 class App < Scratchweb::ConnectionHandler
   
   def dispatch
@@ -19,7 +26,11 @@ class App < Scratchweb::ConnectionHandler
 
     # create file upload
     action(:post,"/uploads/:id/file") do |id|
-      receive(id)
+      
+      file = multipart_parser.receive do |progress|
+        Config.store[id] = progress
+      end
+
       redirect :to => "/empty.html"
     end
     
@@ -30,7 +41,7 @@ class App < Scratchweb::ConnectionHandler
 
     # show nested progress resource of upload
     action(:get,"/uploads/:id/progress") do |id|
-      progress = @store[id]
+      progress = Config.store[id]
       if progress
         render :text => progress.current.to_s
       else
@@ -43,6 +54,7 @@ class App < Scratchweb::ConnectionHandler
       render :view => :show #id
     end
     
+    # deliver assets
     action(:get,"/assets/:file_name") do |file_name|
       render :asset => file_name
     end
