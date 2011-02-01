@@ -4,10 +4,9 @@ module Scratchweb
   class Server
   
     def initialize attrs
-      @client_handler = attrs[:client_handler]
+      @connection_handler = attrs[:connection_handler]
       @host   = attrs[:host]
       @port   = attrs[:port]
-      @routes = attrs[:routes]
     end
   
     def start
@@ -17,7 +16,7 @@ module Scratchweb
       loop do
 #        client_socket = server_socket.accept
         Thread.start(server_socket.accept) do |client_socket|
-          @client_handler.new(:client_socket => client_socket).handle
+          @connection_handler.new(:client_socket => client_socket).handle
         end
       end
     end
