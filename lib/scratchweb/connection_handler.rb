@@ -14,10 +14,13 @@ module Scratchweb
   
     def handle
       begin
-        @http_header = Http::Header.new :header_string => read_header
-        log "request: #{@http_header.method} #{@http_header.path}"
+        before = Time.now
+        header_string = read_header
+        @http_header = Http::Header.new :header_string => header_string
+        log ">>> request: #{@http_header.method} #{@http_header.path}" #"\n#{header_string}"
         dispatch
         render :error => :not_found unless @responded
+        log "<<< time: #{Time.now - before}\n\n"
       ensure
         @socket.close
       end
@@ -28,7 +31,6 @@ module Scratchweb
       while (line = @socket.gets) && (line != END_OF_HEADER)
         header += line
       end
-      log "header:\n#{header}\nend_header"
       header
     end
   
@@ -51,6 +53,10 @@ module Scratchweb
       
       elsif asset = attrs[:asset]
         content  = IO.binread(APP_DIR+"/assets/"+asset) #TODO Fix security flaw
+        response = Http::Response.new(:content => content)
+        
+      elsif path = attrs[:file]
+        content  = IO.binread(path)
         response = Http::Response.new(:content => content)
     
       elsif view = attrs[:view]
@@ -78,11 +84,15 @@ module Scratchweb
     end
     
     def multipart_parser
-      Scratchweb::MultipartParser.new :http_header => @http_header, :input => @socket
+      Scratchweb::Parser::MultipartParser.new :http_header => @http_header, :input => @socket
+    end
+    
+    def post_parser
+      Scratchweb::Parser::PostParser.new :http_header => @http_header, :input => @socket
     end
       
     def log str
-      puts "\n--#{self.object_id}\n#{str}\n--#{self.object_id}"
+      puts "#{Thread.current} #{str}"
     end
     
   end

@@ -8,15 +8,16 @@ class App < Scratchweb::ConnectionHandler
   
   def dispatch
     
-    # form
+    # render form
     action(:get,"/") do
       render :view => :index
     end
 
     # create upload
     action(:post,"/uploads.js") do
-      upload = Upload.create()
-      render :text => '{"_id":"'+upload.id+'"}'
+      upload = Upload.create
+      log upload.to_json
+      render :text => upload.to_json
     end
 
     # create file upload
@@ -25,15 +26,19 @@ class App < Scratchweb::ConnectionHandler
       file = multipart_parser.receive do |progress|
         upload.progress = progress
       end
-
       upload.file = file
-      
-      redirect :to => "/empty.html"
+      log "upload finished. file saved to #{file.path}"
+      render :text => "done"
     end
     
-    # target iframe content after upload
-    action(:get,"/empty.html") do
-      render :view => :empty
+    # download file
+    action(:get,"/uploads/:id/file/:title") do |id|
+      upload = Upload.find(id)
+      if upload
+        render :file => upload.file
+      else
+        render :error => :not_found
+      end
     end
 
     # show nested progress resource of upload
@@ -45,10 +50,26 @@ class App < Scratchweb::ConnectionHandler
         render :error => :not_found
       end
     end
+
+    # save title of uploaded file
+    action(:post,"/uploads/:id/title") do |id|
+      upload = Upload.find(id)
+      upload.title = post_parser.params[:title]
+      if upload
+        render :text => upload.to_json
+      else
+        render :error => :not_found
+      end
+    end
     
     # show upload
     action(:get,"/uploads/:id") do |id|
-      render :view => :show #id
+      upload = Upload.find(id)
+      if upload
+        render :text => upload.to_json
+      else
+        render :error => :not_found
+      end
     end
     
     # deliver assets

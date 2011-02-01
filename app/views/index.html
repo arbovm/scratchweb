@@ -10,20 +10,26 @@
   </head>
   <body>
     <div id="content">
-      <form id="name_form" method="POST">
-        <label for="name">Filename:</label>
-        <hr class="clear" />
-        <input type="input"  name="name" />
-      </form>
-      <iframe src="" name="form_frame" id="form_frame"></iframe>
-      <form id="upload_form" method="POST" action="/" target="form_frame" enctype="multipart/form-data">
-        <label for="name">File to Upload:</label>
-        <hr class="clear" />
-        <input type="file" name="file"/>
-        <hr class="clear" />
-        <div id="progress"></div>
-        <input type="submit" name="submit" id="upload_form_submit" value="Upload" />
-      </form>
+      <div id="navi">
+        <a href="/">New Upload</a>
+      </div>
+      <div id="form_wrapper">
+        <form id="name_form" method="POST">
+          <label for="title">Title:</label>
+          <hr class="clear" />
+          <input type="input" name="title" id="title" value="title.mp3" />
+        </form>
+        <iframe src="" name="form_frame" id="form_frame"></iframe>
+        <form id="upload_form" method="POST" action="/" target="form_frame" enctype="multipart/form-data">
+          <label for="name">File to Upload:</label>
+          <hr class="clear" />
+          <input type="file" name="file"/>
+          <hr class="clear" />
+          <div id="progress"></div>
+          <input type="submit" name="submit" id="upload_form_submit" value="Upload" />
+        </form>
+      </div>
+      <div id="uploads"></div>
     </div>
   </body>
 </html>

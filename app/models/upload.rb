@@ -2,7 +2,7 @@
 
 class Upload
   
-  attr_accessor :id, :file, :filename, :progress
+  attr_accessor :id, :file, :title, :progress
   
   def self.find id
     TransientDb.store[:uploads][id]
@@ -15,5 +15,8 @@ class Upload
     upload
   end
   
-  
+  def to_json
+    '{"_id":"'+id+'","file":"'+ (file ? file.path : "")+'","title":"'+ (title ? title : "")+'"}'
+  end
+
 end
