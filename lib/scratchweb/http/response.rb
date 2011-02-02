@@ -2,10 +2,11 @@ module Scratchweb
   module Http
     class Response
       def initialize attrs
-        @content_type = attrs[:content_type]
-        @content      = attrs[:content]
-        @status_code  = attrs[:status_code]
-        @location     = attrs[:location]
+        @content_type   = attrs[:content_type]
+        @content        = attrs[:content]
+        @content_length = attrs[:content_length]
+        @status_code    = attrs[:status_code]
+        @location       = attrs[:location]
       end
       
       def to_s
@@ -19,7 +20,11 @@ module Scratchweb
         str += "Server: Scratchweb 0.1\r\n"
         str += "Location: #{@location}\r\n" if @location
         str += "Content-Type: #{@content_type}\r\n" if @content_type
-        str += "Content-Length: #{@content.size}\r\n" if @content
+        if @content
+          str += "Content-Length: #{@content.size}\r\n"
+        elsif @content_length
+          str += "Content-Length: #{@content_length}\r\n"
+        end
         str += "Connection: close\r\n\r\n"
         str += "#{@content}" if @content
         str

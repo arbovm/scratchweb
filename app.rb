@@ -35,7 +35,7 @@ class App < Scratchweb::ConnectionHandler
     action(:get,"/uploads/:id/file/:title") do |id|
       upload = Upload.find(id)
       if upload
-        render :file => upload.file
+        serve_download :file_path => upload.file
       else
         render :error => :not_found
       end

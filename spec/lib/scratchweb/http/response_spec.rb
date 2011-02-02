@@ -21,4 +21,9 @@ describe Scratchweb::Http::Response do
     header = Scratchweb::Http::Response.new :status_code => :'302', :location => "/welcome_back.html" 
     header.to_s.should eql("HTTP/1.1 302 Found\r\nServer: Scratchweb 0.1\r\nLocation: /welcome_back.html\r\nConnection: close\r\n\r\n")
   end
+  
+  it "should yield just the header without body when setting content length" do
+    header = Scratchweb::Http::Response.new  :content_length => 4242 
+    header.to_s.should eql("HTTP/1.1 200 OK\r\nServer: Scratchweb 0.1\r\nContent-Length: 4242\r\nConnection: close\r\n\r\n")
+  end
 end

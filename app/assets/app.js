@@ -14,7 +14,7 @@ $(document).ready(function(){
 				var upload = $.parseJSON(json_str);
 				$('#progress').css('background-color','#fff').html('<p class="small">saved as: '+upload.file+'</p>');
 				$('#uploads').html('<a href="'+uploadPath+'/file/'+upload.title+'">'+upload.title+'</a><br />');
-			})
+			});
 		}
 
 		var update_progress = function(percent){
