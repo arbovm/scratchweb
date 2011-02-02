@@ -1,4 +1,3 @@
-
 # Why not to rewrite the web from scratch?
 
 ### This is a Challenge:
@@ -56,14 +55,14 @@ everything from scratch. Usually I don't like to reinvent things, but I want to 
 
 ### Tested on:
 - Mac OS X
- - Chrome 8
- - Safari 5
- - Firefox 3 __(I had to completely disable Firebug in Add-ons menu)__
- - Firefox 4beta10
+  - Chrome 8
+  - Safari 5
+  - Firefox 3 __(I had to completely disable Firebug in Add-ons menu)__
+  - Firefox 4beta10
 
 - WinXP
- - Firefox 2
- - IE6
- - IE8
+  - Firefox 2
+  - IE6
+  - IE8
 
 
