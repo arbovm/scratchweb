@@ -17,13 +17,13 @@
         <form id="name_form" method="POST">
           <label for="title">Title:</label>
           <hr class="clear" />
-          <input type="input" name="title" id="title" value="title.mp3" />
+          <input type="text" name="title" id="title" value="title.mp3" />
         </form>
-        <iframe src="" name="form_frame" id="form_frame"></iframe>
+        <iframe name="form_frame" id="form_frame"></iframe>
         <form id="upload_form" method="POST" action="/" target="form_frame" enctype="multipart/form-data">
-          <label for="name">File to Upload:</label>
+          <label for="file">File to Upload:</label>
           <hr class="clear" />
-          <input type="file" name="file"/>
+          <input type="file" name="file" id="file"/>
           <hr class="clear" />
           <div id="progress"></div>
           <input type="submit" name="submit" id="upload_form_submit" value="Upload" />
