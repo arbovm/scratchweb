@@ -65,7 +65,7 @@ everything from scratch. Usually I don't like to reinvent things, but I want to 
   - IE6
   - IE8
 
-### Run it
+### Run it:
 
     git clone git@github.com:arbovm/scratchweb.git
     cd scratchweb/
