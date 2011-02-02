@@ -1,4 +1,3 @@
-
 # Why not to rewrite the web from scratch?
 
 ### This is a Challenge:
@@ -68,8 +67,8 @@ everything from scratch. Usually I don't like to reinvent things, but I want to 
 
 ### Run it
 
-  git clone git@github.com:arbovm/scratchweb.git
-  cd scratchweb/
-  rvm use 1.9.2
-  ruby app.rb
+    git clone git@github.com:arbovm/scratchweb.git
+    cd scratchweb/
+    rvm use 1.9.2
+    ruby app.rb
 
