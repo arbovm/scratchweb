@@ -36,10 +36,9 @@ and the current value of the title text field should be posted to the server.
 
 ## My Approach:
 
-To show my skills and my understanding on protocol level up to the MVC pattern, I decided
-to take the requirement __"fewest dependencies as possible"__ very serious. I did something 
-I would never do in my daily work: I only depend on Ruby an its own libraries (socket and tempfile) in the Back-end and wrote
-everything from scratch. Usually I don't like to reinvent things, but I want to proof that i can do this.
+In order to show my skills and my understanding on protocol level up to the MVC pattern, I decided to take the requirement __"fewest dependencies as possible"__ very serious. I did something I would never do in my daily work: I only depend on Ruby an its own libraries (socket and tempfile) in the Back-end and wrote everything from scratch. 
+
+Usually I would not reinvent things, but I want to prove that I am capable when it has to be done.
 
 ### Decisions:
 
