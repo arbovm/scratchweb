@@ -1,4 +1,4 @@
-# Why not to rewrite the web from scratch?
+# Why not rewrite the web from scratch?
 
 ### This is a Challenge:
 
