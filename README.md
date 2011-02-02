@@ -52,6 +52,8 @@ Usually I would not reinvent things, but I want to prove that I am capable when 
 - No dynamic views, just JavaScript
 - A deadline of __one week__
 
+![Upload in progress..](http://cloud.github.com/downloads/arbovm/scratchweb/upload.png "Upload in progress..")
+
 ### Tested on:
 - Mac OS X
   - Chrome 8
