@@ -25,6 +25,7 @@ module Scratchweb
         elsif @content_length
           str += "Content-Length: #{@content_length}\r\n"
         end
+        str += "Cache-Control: no-cache\r\n"
         str += "Connection: close\r\n\r\n"
         str += "#{@content}" if @content
         str

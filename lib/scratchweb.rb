@@ -1,3 +1,8 @@
+if RUBY_VERSION != '1.9.2'
+  puts "scratchweb needs Ruby version 1.9.2 (current version:#{RUBY_VERSION})"
+  exit
+end
+
 libdir = File.dirname(__FILE__)
 $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 

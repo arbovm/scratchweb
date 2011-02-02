@@ -1,47 +1,45 @@
 
 
 $(document).ready(function(){
-	console.log("Please disable Firebug / Web Inspector if the progress bar updates too slow!");
 	
 	$.post('/uploads.js', function(json_str) {
-
-		var upload = $.parseJSON(json_str)
-		var uploadPath = '/uploads/'+upload._id
-		console.log("uploadPath:"+uploadPath)
+		var upload = $.parseJSON(json_str);
+		var uploadPath = '/uploads/'+upload._id;
 		
-		var submit_title = function(percent) {
-			$.post(uploadPath+'/title', {"title": $('#title').val()}, function(json_str){
+		if (window.console && console.log) {
+			console.log("Please disable Firebug completely under 'Extras > Add-ons' if the progress bar updates too slow.");
+			console.log("uploadPath:"+uploadPath);
+		}
+		
+		var submitTitle = function(percent) {
+			$.post(uploadPath+'/title', {"title": $('#title').val()}, function(json_str) {
 				var upload = $.parseJSON(json_str);
 				$('#progress').css('background-color','#fff').html('<p class="small">saved as: '+upload.file+'</p>');
 				$('#uploads').html('<a href="'+uploadPath+'/file/'+upload.title+'">'+upload.title+'</a><br />');
 			});
 		}
 
-		var update_progress = function(percent){
-	 		$('#progress').text(" "+percent+"%");
-	 		$('#progress').width(3*parseInt(percent));			
+		var updateProgress = function(percent) {
+	 		$('#progress').text(" "+percent+"%").width(3*parseInt(percent));			
 		}
 
-		var query_progress = function(){
+		var queryProgress = function() {
 			$.get(uploadPath+'/progress', function(percent) {
-				update_progress(percent);
+				updateProgress(percent);
 				if(percent != "100"){
-					window.setTimeout(query_progress, 500);
+					window.setTimeout(queryProgress, 500);
 				} else {
-					submit_title();
+					submitTitle();
 				}
 			});
 		}
 		
-		var upload_form = $('#upload_form')
-		upload_form[0].action = uploadPath+"/file";
-		upload_form.submit(function() {
-
-			upload_form.filter(':input').each(function(input){
-				input.disable();
-			});
-	 		update_progress(0);
-			window.setTimeout(query_progress, 500);
+		var uploadForm = $('#upload_form');
+		uploadForm[0].action = uploadPath+"/file";
+		uploadForm.submit(function() {
+			$('#progress').css('background-color','#ccf')
+	 		updateProgress(0);
+			window.setTimeout(queryProgress, 500);
 		});
 	});
 });

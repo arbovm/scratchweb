@@ -1,6 +1,30 @@
+body {
+	font-family:Arial, sans-serif;
+	font-size:18px;
+}
+
+a {
+	text-decoration: none;
+	color:#000;
+}
+
+a:hover {
+	text-decoration: none;
+	color:#666;
+}
+
+hr.clear {
+	clear:both;
+	border:0;
+}
+
 #content {
 	margin-left:140px;
 	margin-top:40px;
+}
+
+#navi {
+	margin-top:20px;
 }
 
 #form_wrapper {
@@ -11,22 +35,15 @@
 	margin-top:20px;
 }
 
-#navi {
-	margin-top:20px;
-}
-
-#uploads {
-	margin-top:20px;	
-}
-
 #form_frame {
 	border:0;
 	display:none;
 }
 
 div#progress {
-	height:20px;
-	background-color:#ccf;
+	font-size:25px;
+	height:30px;
+	vertical-align: middle;
 	width:0;
 }
 
@@ -43,22 +60,7 @@ p.small {
 	margin-bottom:30px;
 }
 
-hr.clear {
-	clear:both;
-	border:0;
-}
-
-body {
-	font-family:Arial, sans-serif;
-	font-size:18px;
-}
-
-a {
-	text-decoration: none;
-	color:#000;
-}
-a:hover {
-	text-decoration: none;
-	color:#666;
+#uploads {
+	margin-top:20px;	
 }
 
