@@ -1,20 +1,19 @@
 require File.dirname(__FILE__) + '/../../../../lib/scratchweb'
-
+require File.dirname(__FILE__) + '/fake_http_header'
 
 
 describe Scratchweb::Parser::PostParser do
   
   POST_BODY = "title=aaa&key=value"
   
-  class FakeHttpHeader
-    def content_length
-      POST_BODY.size
-    end
+  before(:each) do
+    header = FakeHttpHeader.new
+    header.content_length = POST_BODY.bytesize
+    @parser = Scratchweb::Parser::PostParser.new :http_header => header
   end
   
-  it "should parse body" do
-    parser = Scratchweb::Parser::PostParser.new :socket => nil, :http_header => FakeHttpHeader.new
-    params = parser.parse POST_BODY
+  it "should parse body" do    
+    params = @parser.parse POST_BODY
     params[:title].should eql("aaa")
     params[:key].should eql("value")
   end
