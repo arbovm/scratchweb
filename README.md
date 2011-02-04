@@ -36,7 +36,7 @@ and the current value of the title text field should be posted to the server.
 
 ## My Approach:
 
-In order to show my skills and my understanding on protocol level up to the MVC pattern, I decided to take the requirement __"fewest dependencies as possible"__ very serious. I did something I would never do in my daily work: I only depend on Ruby an its own libraries (socket and tempfile) in the Back-end and wrote everything from scratch. 
+In order to show my skills and my understanding on protocol level up to the MVC pattern, I decided to take the requirement __"fewest dependencies as possible"__ very serious. I did something I would never do in my daily work: I only depend on Ruby and its own libraries (socket and tempfile) in the Back-end and wrote everything from scratch. 
 
 Usually I would not reinvent things, but I want to prove that I am capable when it has to be done.
 
@@ -48,8 +48,9 @@ Usually I would not reinvent things, but I want to prove that I am capable when 
 - As RESTful as possible
 - A pseudo database which is just a nested Hash. But it is completely separate from the web framework and web application.
 - JQuery for Front-end code
-- High-Level Front-end code with Ajax and JSON. No web server specific hacks.
+- High-level Front-end code with Ajax and JSON. No web server specific hacks.
 - No dynamic views, just JavaScript
+- Just two requires: socket and tempfile
 - A deadline of __one week__
 
 ### Tested on:
